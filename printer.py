@@ -1,10 +1,57 @@
+import sys
 import os
 import time
 from colorama import init, Fore, Back, Style
 import random
+import shutil
+
+sys.stdout.write(f"\x1b[8;{2000};{2000}t")
+sys.stdout.flush()
 
 
 
+
+def print_centered(text,end=None, flush=None):
+    # Get the number of columns in the terminal window
+    terminal_width = shutil.get_terminal_size().columns
+    
+    # Pad the text with spaces evenly on both sides
+    if end == None:
+      print(text.center(terminal_width))
+    else:
+       print(text.center(terminal_width), end=end, flush=flush)
+
+
+
+def split_print_center(text, end=None, flush=None):
+    for x in  text.split("\n"):
+    
+      print_centered(Fore.RED + x, end, flush)
+      time.sleep(0.05)
+    
+
+
+LOGO = '''
+
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡀⠀⠀⠀⠀⠀⢀⠀⠀⠀
+⠀⠀⠀⢂⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣶⠛⠁⠀⠀⡆⠀⢀⣼⠀⠀⠀
+⠀⠀⠀⢾⠀⠀⠀⠀⠀⢀⢠⠂⠀⠀⠀⠀⣿⣇⡄⠀⠀⣰⠇⠀⠘⠀⠀⠀⠀
+⠀⠀⠀⢠⠀⠀⠀⠀⠀⢸⣄⠀⠀⢘⡄⢰⣿⣿⣣⣴⠁⢁⢀⢀⠀⠀⠀⢀⠆
+⢠⠀⠀⠘⠧⡀⠀⠰⡄⠈⢻⡄⢸⣿⣿⣿⣿⣿⣳⠋⣠⣷⠘⣸⠀⢠⡇⠈⠀
+⠰⣇⠀⢧⢠⠘⣦⠀⠀⡘⣾⣞⣿⣿⣿⣿⡿⢟⣿⣿⢿⣟⢀⠟⡄⠈⡇⠀⠀
+⠀⠨⡆⠀⠗⠛⠸⡇⢳⣷⣻⡟⠟⡿⣵⣯⣾⢿⣿⣧⣼⣿⢺⢠⣷⠀⠁⠀⠀
+⠰⢸⡇⢀⠈⠳⠶⠽⣆⣻⡟⣿⣇⣿⣿⣿⡏⣵⣿⡿⠛⠛⣾⢸⣣⠀⠀⠀⠀
+⠀⠀⢉⣾⡄⡁⣲⠫⢡⠘⣷⣿⡿⣧⢇⢿⣷⣿⠟⣡⠀⠀⣷⣟⡇⠀⠀⠀⠀
+⠀⠀⢰⣟⠛⠲⢤⣤⡤⠂⢄⢎⣿⣿⣶⣍⢍⡀⠀⠀⣀⣼⣿⡿⠇⠀⠀⠀⠀
+⠀⠀⢦⠙⢌⢭⡷⠾⠶⠶⢂⡲⢨⣿⣷⣝⠾⣝⡲⠶⢚⣫⣿⡃⢮⢢⠀⠀⠀
+⠀⠀⠈⠳⠀⠀⠀⠀⣤⣼⠷⣗⠘⣿⣿⠛⡳⠉⠻⢿⣿⢵⣮⡛⢤⣃⠇⠀⠀
+⠀⠀⠀⠀⠈⠀⠀⢈⣬⡝⣻⣛⠄⢛⣃⣐⡴⣭⣍⠳⡅⠀⠉⠲⠶⠟⠀⠀⠀
+⠀⠀⠀⠀⣀⣤⣶⡿⠛⢁⠀⠀⠀⠀⠀⠀⠀⡌⠛⠿⣿⣦⣄⡀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠘⢿⣤⣘⣷⠶⠚⠛⠻⢶⣭⣁⣴⠖⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠞⣼⣿⣾⣿⣞⠖⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠈⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+
+'''
 
 
 CYBERPUNK_2077_TEXT = '''
@@ -166,90 +213,104 @@ def start():
   os.system('clear')
   flag = False
 
-  for x in  CYBERPUNK_2077_TEXT.split("\n"):
-    if flag:
-      print(Fore.MAGENTA + x)
-    time.sleep(0.05)
-    flag= True
+  # for x in  CYBERPUNK_2077_TEXT.split("\n"):
+  #   if flag:
+  #     print(Fore.MAGENTA + x)
+  #   time.sleep(0.05)
+  #   flag= True
 
 
 
 
-  for x in  cd_projekt_red.split("\n"):
-    if flag:
-      print(Fore.RED + x)
-    time.sleep(0.05)
-    flag= True
+  # for x in  cd_projekt_red.split("\n"):
+  #   if flag:
+  #     print(Fore.RED + x)
+  #   time.sleep(0.05)
+  #   flag= True
 
 
-  time.sleep(1.2)
+  # time.sleep(1.2)
 
-  os.system('clear')
+  # os.system('clear')
 
-  for x in  harsh_shinde.split("\n"):
-    if flag:
-      print(x)
-    time.sleep(0.05)
-    flag= True
-
-
-
-  time.sleep(1.2)
-  os.system('clear')
-
-  for x in  night_city.split("\n"):
-    if flag:
-      print(Fore.MAGENTA + x)
-    time.sleep(0.05)
-    flag= True
+  # for x in  harsh_shinde.split("\n"):
+  #   if flag:
+  #     print(x)
+  #   time.sleep(0.05)
+  #   flag= True
 
 
-  time.sleep(0.7)
 
-  os.system('clear')
+  # time.sleep(1.2)
+  # os.system('clear')
+
+  # for x in  night_city.split("\n"):
+  #   if flag:
+  #     print(Fore.MAGENTA + x)
+  #   time.sleep(0.05)
+  #   flag= True
+
+
+  # time.sleep(0.7)
+
+  # os.system('clear')
     
-  for x in  neural_link.split("\n"):
-    if flag:
-      print(Fore.LIGHTGREEN_EX + x)
-    time.sleep(0.05)
-    flag= True
+  # for x in  neural_link.split("\n"):
+  #   if flag:
+  #     print(Fore.LIGHTGREEN_EX + x)
+  #   time.sleep(0.05)
+  #   flag= True
 
 
 
 
-  for x in  skill_database.split("\n"):
-    if flag:
-      print(Fore.LIGHTGREEN_EX + x)
-    time.sleep(0.05)
-    flag= True
+  # for x in  skill_database.split("\n"):
+  #   if flag:
+  #     print(Fore.LIGHTGREEN_EX + x)
+  #   time.sleep(0.05)
+  #   flag= True
 
 
 
-  for x in  build_protocol.split("\n"):
-    if flag:
-      print(Fore.LIGHTGREEN_EX + x)
-    time.sleep(0.05)
-    flag= True
+  # for x in  build_protocol.split("\n"):
+  #   if flag:
+  #     print(Fore.LIGHTGREEN_EX + x)
+  #   time.sleep(0.05)
+  #   flag= True
 
 
-  for x in  ai_construct.split("\n"):
-    if flag:
-      print(Fore.LIGHTGREEN_EX + x)
-    time.sleep(0.05)
-    flag= True
+  # for x in  ai_construct.split("\n"):
+  #   if flag:
+  #     print(Fore.LIGHTGREEN_EX + x)
+  #   time.sleep(0.05)
+  #   flag= True
 
 
 
-  time.sleep(1.2)
+  # time.sleep(1.2)
+  # os.system('clear')
+
+  # for x in  jack_in.split("\n"):
+  #   if flag:
+  #     print(Fore.RED + x)
+  #   time.sleep(0.05)
+  #   flag= True
+
   os.system('clear')
-
-  for x in  jack_in.split("\n"):
+  for x in  LOGO.split("\n"):
     if flag:
-      print(Fore.RED + x)
+      print_centered(Fore.RED + x)
     time.sleep(0.05)
     flag= True
 
+  for x in "\033[3mHarsh Shinde\nBased off on PROJEKT CD RED'S Cyberpunk 2077s\033[0m".split('\n'):
+     if flag:
+        split_print_center(x)
+     time.sleep(0.05)
 
+  time.sleep(2)
+  print("\n\n")
+  
 
   quotes = [
       '''Give yourself time. Ideas'll come. Life'll shake you, roll you, maybe embrace you. The music'll find you.
@@ -402,12 +463,12 @@ def start():
   quote = quotes[random.randint(0,len(quotes)-1)]
   
 
-  for x in quote:  
-    print(Fore.MAGENTA + f"\033[3m{x}\033[0m", end='', flush=True)
-    time.sleep(0.03)
+  # for x in quote:  
+  #   print(Fore.MAGENTA + f"\033[3m{x}\033[0m", end='', flush=True)
+  #   time.sleep(0.03)
+  
+  
 
-  print("\n\n")
-    
 
 
 
@@ -440,3 +501,4 @@ def start():
       
 #       You shall never have to forgive me for anything again!
 #       - Yorinobu Arasaka''',
+
