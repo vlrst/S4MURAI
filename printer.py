@@ -29,6 +29,12 @@ def split_print_center(text, end=None, flush=None):
       print_centered(Fore.RED + x, end, flush)
       time.sleep(0.05)
     
+def split_print(text, end=None, flush=None):
+   for x in text.split("\n"):
+      print(Fore.RED + x, end=end, flush=flush)
+      time.sleep(0.05)
+
+
 
 
 LOGO = '''

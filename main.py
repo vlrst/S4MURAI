@@ -22,7 +22,7 @@ init()
 #printer.start()
 
 
-from printer import print_centered, split_print_center, start
+from printer import print_centered, split_print_center, split_print, start
 
 
 
@@ -163,6 +163,56 @@ def enterBody():
     # FUNCTION TO DRAW ONLY THE BODY MENU
     # ========================================================
 
+    def draw_skills(levels):
+        skill_selected = 0
+        os.system('clear')
+        print("\n\n")
+        # Return to beginning of menu
+        print("\033[u", end="")
+        for level in [levels]:
+                for skill in level:
+                    for i, option in enumerate(skill):
+
+                        print("\033[2K\r", end="")
+                        if i == skill_selected:
+                            split_print( # NOT SPLIT_PRINT_CENTER BECAUSE ITS A SKILL SO WE WANT TO SHOW THE DESCRIPTION AS WELL
+                                f"\033[3m\033[45m\033[97m> {option.name}\033[0m"
+                            )
+                        else: # NOT SPLIT_PRINT_CENTER BECAUSE ITS A SKILL SO WE WANT TO SHOW THE DESCRIPTION AS WELL
+                            split_print(
+                                f"  {option.name}"
+                            )
+        while True:
+            key = get_key()
+
+        # --------------------------------
+        # UP
+        # --------------------------------
+
+            if key == "\x1b[A":
+
+                skill_selected -= 1
+
+                if skill_selected < 0:
+                    skill_selected = len([i for level in Body_Levels for i in level]) - 1
+
+                draw_skills(Body_Levels)
+
+            # --------------------------------
+            # DOWN
+            # --------------------------------
+
+            elif key == "\x1b[B":
+
+                skill_selected += 1
+
+                if skill_selected >= len([i for level in Body_Levels for i in level]):
+                    skill_selected = 0
+
+                draw_skills(Body_Levels)
+
+        
+
     def draw_body_menu():
         os.system('clear')
         print("\n\n")
@@ -242,14 +292,14 @@ def enterBody():
         elif key == "\r":
 
             if body_selected == 0:
-
+                
                 # OVERVIEW
                 pass
 
             elif body_selected == 1:
 
                 # SKILLS
-                pass
+                draw_skills(Body_Levels)
 
             elif body_selected == 2:
 
