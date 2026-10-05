@@ -1,9 +1,9 @@
 import os
 import time
 import sys
-import io 
-import numpy
-import printer
+import tty
+import termios
+from tqdm import tqdm
 from Skillset import * 
 from Skill import * 
 from Subs.Body import * 
@@ -11,23 +11,11 @@ from Subs.Cool import *
 from Subs.Intelligence import * 
 from Subs.Reflexes import * 
 from Subs.Technical_Ability import * 
-#from VARS import * 
-#from ollama import chat as MODEL
-#from ollama import ChatResponse
-#import datetime
-#import pyfiglet
-#import random
-
-
-# output_buffer = io.StringIO()
-# sys.stdout = output_buffer
-
+from random import randint
 perk_points = 13
 attribute_points = 5
-import random
 import time
 from colorama import Fore, Style, init
-import threading
 init()
 
 
@@ -39,45 +27,11 @@ from printer import print_centered, split_print_center, start
 
 
 
-import sys
-import termios
-import tty
-import os
 
 
-def enterBody():
-    os.system('clear')
-    split_print_center("\033[2J\033[H", end="")
-    print('\n\n\n')
-    split_print_center("> SCANNING SOMATIC SYSTEMS...")
-    time.sleep(0.7)
-    split_print_center("> STRENGTH NEURONS: DETECTED")
-    split_print_center("> SKELETAL INTEGRITY: ANALYZED")
-    split_print_center("> PHYSICAL OUTPUT CAPACITY: CALCULATED")
-    for level in Body_Levels:
-        for body in level:
-            split_print_center(body.name)
-    pass
 
-def enterCool():
-    os.system('clear')
-    pass
 
-def enterIntelligence():
-    os.system('clear')
-    pass
 
-def enterReflexes():
-    os.system('clear')
-    pass
-
-def enterTechnicalAbility():
-    os.system('clear')
-    pass
-
-def enterOverview():
-    os.system('clear')
-    pass
 
 
 
@@ -148,7 +102,7 @@ def draw_menu():
     print()
     split_print_center("        ↑ ↓  Navigate       ENTER  Select")
     split_print_center(f"        PERK POINTS  {perk_points}")
-    split_print_center(f"        ATTRIBUTE POINTS  {perk_points}")
+    split_print_center(f"        ATTRIBUTE POINTS  {attribute_points}")
 
 
 # ============================================================
@@ -157,9 +111,163 @@ def draw_menu():
 
 start()
 
+
+
+
+
+
+def enterBody():
+
+    body_options = [
+        "[ O ] OVERVIEW",
+        "[ S ] SKILLS",
+        "[ P ] PERCENT",
+        "[ B ] BACK"
+    ]
+
+    body_selected = 0
+
+    # ========================================================
+    # INITIAL SCREEN
+    # ========================================================
+
+    os.system("clear")
+    split_print_center("\033[2J\033[H", end="")
+
+    print("\n\n\n")
+
+    # Scan
+    split_print_center("> SCANNING SOMATIC SYSTEMS...")
+    time.sleep(0.7)
+
+    split_print_center("> STRENGTH NEURONS: DETECTED")
+    split_print_center("> SKELETAL INTEGRITY: ANALYZED")
+    split_print_center("> PHYSICAL OUTPUT CAPACITY: CALCULATED\n\n\n")
+
+    # Body levels
+    for level in Body_Levels:
+        for body in level:
+            split_print_center(body.name)
+
+    print("\n")
+
+    # ========================================================
+    # SAVE CURSOR POSITION
+    #
+    # Everything above this point will stay on scre en.
+    # ========================================================
+
+    print("\033[s", end="")
+
+    # ========================================================
+    # FUNCTION TO DRAW ONLY THE BODY MENU
+    # ========================================================
+
+    def draw_body_menu():
+        os.system('clear')
+        print("\n\n")
+        # Return to beginning of menu
+        print("\033[u", end="")
+
+        for i, option in enumerate(body_options):
+
+            # Clear the current terminal line
+            print("\033[2K\r", end="")
+
+            if i == body_selected:
+                split_print_center(
+                    f"\033[3m\033[45m\033[97m> {option}\033[0m"
+                )
+            else:
+                split_print_center(
+                    f"  {option}"
+                )
+
+        print("\033[2K\r", end="")
+        split_print_center(
+            "        ↑ ↓  Navigate       ENTER  Select"
+        )
+
+        print("\033[2K\r", end="")
+        split_print_center(
+            f"        PERK POINTS  {perk_points}"
+        )
+
+        print("\033[2K\r", end="")
+        split_print_center(
+            f"        ATTRIBUTE POINTS  {attribute_points}"
+        )
+
+    # Draw menu for the first time
+    draw_body_menu()
+
+    # ========================================================
+    # BODY MENU LOOP
+    # ========================================================
+
+    while True:
+
+        key = get_key()
+
+        # --------------------------------
+        # UP
+        # --------------------------------
+
+        if key == "\x1b[A":
+
+            body_selected -= 1
+
+            if body_selected < 0:
+                body_selected = len(body_options) - 1
+
+            draw_body_menu()
+
+        # --------------------------------
+        # DOWN
+        # --------------------------------
+
+        elif key == "\x1b[B":
+
+            body_selected += 1
+
+            if body_selected >= len(body_options):
+                body_selected = 0
+
+            draw_body_menu()
+
+        # --------------------------------
+        # ENTER
+        # --------------------------------
+
+        elif key == "\r":
+
+            if body_selected == 0:
+
+                # OVERVIEW
+                pass
+
+            elif body_selected == 1:
+
+                # SKILLS
+                pass
+
+            elif body_selected == 2:
+
+                # PERCENT
+                pass
+
+            elif body_selected == 3:
+
+                # BACK
+                return
+            split_print_center(f"\nYou selected: {body_options[body_selected]}")
+            
+            
+
 while True:
 
     draw_menu()
+    
 
     key = get_key()
 
@@ -181,27 +289,26 @@ while True:
 
     # ENTER
     elif key == "\r":
-        print(selected)
+        #print(selected)
         match selected: # learned that the index starts at 0 for this as well
             
-            case 0:
-                enterBody()   
-            case 1:
-                enterCool()
+            case 0: # enter body
+                enterBody()
                 
-            case 2:
-                enterIntelligence()
-            case 3:
-                enterReflexes()
-            case 4:
-                enterTechnicalAbility()
-        # Disconnect
-            case 5:
-                enterOverview()
             case 6:
-                split_print_center("\nDisconnecting...")
+                os.system('clear')
+                split_print_center("\n\n> DISCONNECT ")
+                time.sleep(.1)
+                split_print_center("\nTERMINATING NEURAL LINK...\n")
+                for i in tqdm(range(100)):
+                    time.sleep(randint(1,10)/100)
+                split_print_center("\n[CONNECTION LOST]")
+                time.sleep(.5)
+                split_print_center("STAY SAFE V...")
                 break
+   
+            
 
         # Other options
         split_print_center(f"\nYou selected: {options[selected]}")
-        input("\nPress ENTER to return to the menu...")
+        # input("\nPress ENTER to return to the menu...")

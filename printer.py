@@ -311,7 +311,6 @@ def start():
   time.sleep(2)
   print("\n\n")
   
-
   quotes = [
       '''Give yourself time. Ideas'll come. Life'll shake you, roll you, maybe embrace you. The music'll find you.
       - Johnny Silverhand''',
