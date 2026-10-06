@@ -3,6 +3,7 @@ import time
 import sys
 import tty
 import termios
+import shutil
 from tqdm import tqdm
 from Skillset import * 
 from Skill import * 
@@ -11,6 +12,7 @@ from Subs.Cool import *
 from Subs.Intelligence import * 
 from Subs.Reflexes import * 
 from Subs.Technical_Ability import * 
+from glitch import glitch_text
 from random import randint
 perk_points = 13
 attribute_points = 5
@@ -22,7 +24,7 @@ init()
 #printer.start()
 
 
-from printer import print_centered, split_print_center, split_print, start
+from printer import print_centered, split_print_center, split_print, print_right, start
 
 
 
@@ -146,8 +148,12 @@ def enterBody():
 
     # Body levels
     for level in Body_Levels:
-        for body in level:
-            split_print_center(body.name)
+        for skill in level:
+            #split_print_center(body.name)
+            #split_print(str([body]))
+            print(f"[{skill.sub} {glitch_text(f"{skill.name}-{skill}")}]")
+            glitch_text(f"{skill.name}-{skill.sub}")
+            
 
     print("\n")
 
@@ -163,25 +169,45 @@ def enterBody():
     # FUNCTION TO DRAW ONLY THE BODY MENU
     # ========================================================
 
-    def draw_skills(levels):
-        skill_selected = 0
+    def draw_skills(levels, skills_in_level, skill_selected):
+        
         os.system('clear')
         print("\n\n")
         # Return to beginning of menu
         print("\033[u", end="")
-        for level in [levels]:
-                for skill in level:
-                    for i, option in enumerate(skill):
+        for i, option in enumerate(levels):
+            #print(f'THIS IS THE SKILL SELECTED {skill_selected} and it is at index {i}')
+            print("\033[2K\r", end="")
+            if i == skill_selected:
+                split_print( # NOT SPLIT_PRINT_CENTER BECAUSE ITS A SKILL SO WE WANT TO SHOW THE DESCRIPTION AS WELL
+                    f"\033[3m\033[45m\033[97m> Level {option}\033[0m"
+                )
+            else: # NOT SPLIT_PRINT_CENTER BECAUSE ITS A SKILL SO WE WANT TO SHOW THE DESCRIPTION AS WELL
+                split_print(
+                    f"  Level {option}"
+                )
 
-                        print("\033[2K\r", end="")
-                        if i == skill_selected:
-                            split_print( # NOT SPLIT_PRINT_CENTER BECAUSE ITS A SKILL SO WE WANT TO SHOW THE DESCRIPTION AS WELL
-                                f"\033[3m\033[45m\033[97m> {option.name}\033[0m"
-                            )
-                        else: # NOT SPLIT_PRINT_CENTER BECAUSE ITS A SKILL SO WE WANT TO SHOW THE DESCRIPTION AS WELL
-                            split_print(
-                                f"  {option.name}"
-                            )
+            if skill_selected == 0:
+                
+                    
+                for level in Body_Levels:
+                    for skill in level:
+                        print_right(skill.name)
+                
+        
+        # for level in [levels]:
+        #         for skill in level:
+        #             for i, option in enumerate(skill):
+        #                 print(f'THIS IS THE SKILL SELECTED {skill_selected} and it is at index {i}')
+        #                 print("\033[2K\r", end="")
+        #                 if i == skill_selected:
+        #                     split_print( # NOT SPLIT_PRINT_CENTER BECAUSE ITS A SKILL SO WE WANT TO SHOW THE DESCRIPTION AS WELL
+        #                         f"\033[3m\033[45m\033[97m> {option.name}\033[0m"
+        #                     )
+        #                 else: # NOT SPLIT_PRINT_CENTER BECAUSE ITS A SKILL SO WE WANT TO SHOW THE DESCRIPTION AS WELL
+        #                     split_print(
+        #                         f"  {option.name}"
+        #                     )
         while True:
             key = get_key()
 
@@ -194,9 +220,10 @@ def enterBody():
                 skill_selected -= 1
 
                 if skill_selected < 0:
-                    skill_selected = len([i for level in Body_Levels for i in level]) - 1
+                    #skill_selected = len([i for level in Body_Levels for i in level]) - 1
+                    skill_selected = len([1,2,3,4]) - 1
 
-                draw_skills(Body_Levels)
+                draw_skills([1,2,3,4], Body_Levels, skill_selected)
 
             # --------------------------------
             # DOWN
@@ -206,10 +233,11 @@ def enterBody():
 
                 skill_selected += 1
 
-                if skill_selected >= len([i for level in Body_Levels for i in level]):
+                #if skill_selected >= len([i for level in Body_Levels for i in level]):
+                if skill_selected >= len([1,2,3,4]):
                     skill_selected = 0
 
-                draw_skills(Body_Levels)
+                draw_skills([1,2,3,4], Body_Levels, skill_selected)
 
         
 
@@ -299,7 +327,7 @@ def enterBody():
             elif body_selected == 1:
 
                 # SKILLS
-                draw_skills(Body_Levels)
+                draw_skills([1,2,3,4], Body_Levels, skill_selected=0) # skill_selected=0 to start at the top
 
             elif body_selected == 2:
 

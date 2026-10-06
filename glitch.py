@@ -43,7 +43,7 @@ import time
 GLITCH_CHARS = "▓▒░█@#$%&/\\<>"
 
 
-def glitch_text(text, frames=24, delay=0.05):
+def glitch_text(text, frames=4, delay=0.02):
     off=0
     for frame in range(frames):
         off+=1
@@ -78,7 +78,6 @@ def glitch_text(text, frames=24, delay=0.05):
         time.sleep(delay)
 
     # Final clean version
-    if off>20:
-        print_centered("\r" + " " * 10 + text)
+    # if off>20:
+    #     print_centered("\r" + " " * 10 + text)
 
-glitch_text(TITLE)
