@@ -3,7 +3,7 @@
 
 
 <p align="center">
-  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=24&duration=2500&pause=800&color=FF00FF&center=true&vCenter=true&width=700&lines=S4MURAI;Cyberpunk+2077+Skill+Tree" />
+  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&size=40&duration=2500&pause=800&color=FF00FF&center=true&vCenter=true&width=700&lines=S4MURAI;Cyberpunk+2077+Skill+Tree" />
 </p>
 
 
