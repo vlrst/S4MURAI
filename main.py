@@ -151,8 +151,9 @@ def enterBody():
         for skill in level:
             #split_print_center(body.name)
             #split_print(str([body]))
-            print(f"[{skill.sub} {glitch_text(f"{skill.name}-{skill}")}]")
-            glitch_text(f"{skill.name}-{skill.sub}")
+            glitch_text(f"{skill.name}{skill}")
+            print(f"[V//{skill.sub}]")# {glitch_text(f"{skill.name}{skill}")}]")
+            
             
 
     print("\n")
