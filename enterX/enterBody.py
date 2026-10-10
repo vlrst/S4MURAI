@@ -1,55 +1,62 @@
-import os
-import time
-import sys
-import tty
-import termios
-import shutil
-from tqdm import tqdm
-from Skillset import Body_Levels, Cool_Levels
-
-from Subs.Cool import *
-import os
-from printer import  *
-perk_points = 13
-attribute_points = 5
-import termios
+from printer import * 
+from Subs.Body import * 
+from get_key import get_key
+from points import * 
 
 
-# for row in Body_Levels:
+def enterBody():
 
-#     for skill in row:
-#         initials = "".join(
-#             word[0].upper()
-#             for word in skill.name.split()
-#         )
+    body_options = [
+        "[ O ] OVERVIEW",
+        "[ S ] SKILLS",
+        "[ P ] PERCENT",
+        "[ B ] BACK"
+    ]
 
-#         print(f"{initials:<5} {skill.name:<30}")
+    body_selected = 0
 
-#     print()
+    # ========================================================
+    # INITIAL SCREEN
+    # ========================================================
 
+    os.system("clear")
+    split_print_center("\033[2J\033[H", end="")
 
+    print("\n\n\n")
 
-def get_key():
-    fd = sys.stdin.fileno()
-    old_settings = termios.tcgetattr(fd)
+    # Scan
+    split_print_center("> SCANNING SOMATIC SYSTEMS...")
+    time.sleep(0.7)
 
-    try:
-        tty.setraw(fd)
+    split_print_center("> STRENGTH NEURONS: DETECTED")
+    split_print_center("> SKELETAL INTEGRITY: ANALYZED")
+    split_print_center("> PHYSICAL OUTPUT CAPACITY: CALCULATED\n\n\n")
 
-        key = sys.stdin.read(1)
+    # Body levels
+    for level in Body_Levels:
+        for skill in level:
+            #split_print_center(body.name)
+            #split_print(str([body]))
+            glitch_text(f"{skill.name}{skill}")
+            print(f"[V//{skill.sub}]")# {glitch_text(f"{skill.name}{skill}")}]")
+            
+            
 
-        # Arrow keys begin with ESC
-        if key == "\x1b":
-            key += sys.stdin.read(2)
+    print("\n")
 
-        return key
+    # ========================================================
+    # SAVE CURSOR POSITION
+    #
+    # Everything above this point will stay on scre en.
+    # ========================================================
 
-    finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
+    print("\033[s", end="")
 
+    # ========================================================
+    # FUNCTION TO DRAW ONLY THE BODY MENU
+    # ========================================================
 
-
-def draw_skills(levels, skills_in_level, skill_selected):
+    def draw_skills(levels, skills_in_level, skill_selected):
         
         os.system('clear')
         print("\n\n")
@@ -103,7 +110,7 @@ def draw_skills(levels, skills_in_level, skill_selected):
                     #skill_selected = len([i for level in Body_Levels for i in level]) - 1
                     skill_selected = len([1,2,3,4]) - 1
 
-                draw_skills([1,2,3,4], Cool_Levels, skill_selected)
+                draw_skills([1,2,3,4], Body_Levels, skill_selected)
 
             # --------------------------------
             # DOWN
@@ -117,24 +124,22 @@ def draw_skills(levels, skills_in_level, skill_selected):
                 if skill_selected >= len([1,2,3,4]):
                     skill_selected = 0
 
-                draw_skills([1,2,3,4], Cool_Levels, skill_selected)
+                draw_skills([1,2,3,4], Body_Levels, skill_selected)
 
         
 
-
-def draw_cool_menu():
-        cool_selected = 0
+    def draw_body_menu():
         os.system('clear')
         print("\n\n")
         # Return to beginning of menu
         print("\033[u", end="")
 
-        for i, option in enumerate(cool_options):
+        for i, option in enumerate(body_options):
 
             # Clear the current terminal line
             print("\033[2K\r", end="")
 
-            if i == cool_selected:
+            if i == body_selected:
                 split_print_center(
                     f"\033[3m\033[45m\033[97m> {option}\033[0m"
                 )
@@ -158,6 +163,68 @@ def draw_cool_menu():
             f"        ATTRIBUTE POINTS  {attribute_points}"
         )
 
+    # Draw menu for the first time
+    draw_body_menu()
 
+    # ========================================================
+    # BODY MENU LOOP
+    # ========================================================
 
+    while True:
 
+        key = get_key()
+
+        # --------------------------------
+        # UP
+        # --------------------------------
+
+        if key == "\x1b[A":
+
+            body_selected -= 1
+
+            if body_selected < 0:
+                body_selected = len(body_options) - 1
+
+            draw_body_menu()
+
+        # --------------------------------
+        # DOWN
+        # --------------------------------
+
+        elif key == "\x1b[B":
+
+            body_selected += 1
+
+            if body_selected >= len(body_options):
+                body_selected = 0
+
+            draw_body_menu()
+
+        # --------------------------------
+        # ENTER
+        # --------------------------------
+
+        elif key == "\r":
+
+            if body_selected == 0:
+                
+                # OVERVIEW
+                pass
+
+            elif body_selected == 1:
+
+                # SKILLS
+                draw_skills([1,2,3,4], Body_Levels, skill_selected=0) # skill_selected=0 to start at the top
+
+            elif body_selected == 2:
+
+                # PERCENT
+                pass
+
+            elif body_selected == 3:
+
+                # BACK
+                return
+            split_print_center(f"\nYou selected: {body_options[body_selected]}")
+            
+            

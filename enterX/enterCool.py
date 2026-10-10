@@ -1,55 +1,61 @@
-import os
-import time
-import sys
-import tty
-import termios
-import shutil
-from tqdm import tqdm
-from Skillset import Body_Levels, Cool_Levels
+from printer import * 
+from Subs.Cool import * 
+from get_key import get_key
+from points import * 
 
-from Subs.Cool import *
-import os
-from printer import  *
-perk_points = 13
-attribute_points = 5
-import termios
+def enterCool():
 
+    cool_options = [
+        "[ O ] OVERVIEW",
+        "[ S ] SKILLS",
+        "[ P ] PERCENT",
+        "[ B ] BACK"
+    ]
 
-# for row in Body_Levels:
+    cool_selected = 0
 
-#     for skill in row:
-#         initials = "".join(
-#             word[0].upper()
-#             for word in skill.name.split()
-#         )
+    # ========================================================
+    # INITIAL SCREEN
+    # ========================================================
 
-#         print(f"{initials:<5} {skill.name:<30}")
+    os.system("clear")
+    split_print_center("\033[2J\033[H", end="")
 
-#     print()
+    print("\n\n\n")
 
+    # Scan
+    split_print_center("> SCANNING SOMATIC SYSTEMS...")
+    time.sleep(0.7)
 
+    split_print_center("> STRENGTH NEURONS: DETECTED")
+    split_print_center("> SKELETAL INTEGRITY: ANALYZED")
+    split_print_center("> PHYSICAL OUTPUT CAPACITY: CALCULATED\n\n\n")
 
-def get_key():
-    fd = sys.stdin.fileno()
-    old_settings = termios.tcgetattr(fd)
+    # Body levels
+    for level in Cool_Levels:
+        for skill in level:
+            #split_print_center(body.name)
+            #split_print(str([body]))
+            glitch_text(f"{skill.name}{skill}")
+            print(f"[V//{skill.sub}]")# {glitch_text(f"{skill.name}{skill}")}]")
+            
+            
 
-    try:
-        tty.setraw(fd)
+    print("\n")
 
-        key = sys.stdin.read(1)
+    # ========================================================
+    # SAVE CURSOR POSITION
+    #
+    # Everything above this point will stay on scre en.
+    # ========================================================
 
-        # Arrow keys begin with ESC
-        if key == "\x1b":
-            key += sys.stdin.read(2)
+    print("\033[s", end="")
 
-        return key
+    # ========================================================
+    # FUNCTION TO DRAW ONLY THE BODY MENU
+    # ========================================================
 
-    finally:
-        termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
-
-
-
-def draw_skills(levels, skills_in_level, skill_selected):
+    def draw_skills(levels, skills_in_level, skill_selected):
         
         os.system('clear')
         print("\n\n")
@@ -121,9 +127,7 @@ def draw_skills(levels, skills_in_level, skill_selected):
 
         
 
-
-def draw_cool_menu():
-        cool_selected = 0
+    def draw_cool_menu():
         os.system('clear')
         print("\n\n")
         # Return to beginning of menu
@@ -158,6 +162,68 @@ def draw_cool_menu():
             f"        ATTRIBUTE POINTS  {attribute_points}"
         )
 
+    # Draw menu for the first time
+    draw_cool_menu()
 
+    # ========================================================
+    # COOL MENU LOOP
+    # ========================================================
 
+    while True:
 
+        key = get_key()
+
+        # --------------------------------
+        # UP
+        # --------------------------------
+
+        if key == "\x1b[A":
+
+            cool_selected -= 1
+
+            if cool_selected < 0:
+                cool_selected = len(cool_options) - 1
+
+            draw_cool_menu()
+
+        # --------------------------------
+        # DOWN
+        # --------------------------------
+
+        elif key == "\x1b[B":
+
+            cool_selected += 1
+
+            if cool_selected >= len(cool_options):
+                cool_selected = 0
+
+            draw_cool_menu()
+
+        # --------------------------------
+        # ENTER
+        # --------------------------------
+
+        elif key == "\r":
+
+            if cool_selected == 0:
+                
+                # OVERVIEW
+                pass
+
+            elif cool_selected == 1:
+
+                # SKILLS
+                draw_skills([1,2,3,4], Cool_Levels, skill_selected=0) # skill_selected=0 to start at the top
+
+            elif cool_selected == 2:
+
+                # PERCENT
+                pass
+
+            elif cool_selected == 3:
+
+                # BACK
+                return
+            split_print_center(f"\nYou selected: {cool_options[cool_selected]}")
+            
+            
